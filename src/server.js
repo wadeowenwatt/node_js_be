@@ -11,7 +11,6 @@ app.get("/push_noti", (request, response) => {
     })
 });
 
-app.post();
 
 app.listen(PORT, () =>
   console.log(`Server running on port http://localhost:${PORT}`)
