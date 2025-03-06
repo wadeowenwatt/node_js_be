@@ -3,9 +3,12 @@ import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 import authRoutes from "./routes/authRoutes.js";
 import todoRoutes from "./routes/todoRoutes.js";
+import dotenv from "dotenv";
+import authMiddleware from "./middleware/authMiddleware.js";
 
+dotenv.config();
 const app = express();
-const PORT = Number(process.env.PORT) || 5003;
+const PORT = process.env.PORT || 5003;
 
 // Get the file path from the URL of the current module
 const __filename = fileURLToPath(import.meta.url);
@@ -27,7 +30,7 @@ app.get("/", (req, res) => {
 
 // Routes
 app.use("/auth", authRoutes);
-app.use("/todos", todoRoutes);
+app.use("/todos", authMiddleware, todoRoutes);
 
 
 app.listen(PORT, () => {

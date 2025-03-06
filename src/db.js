@@ -13,11 +13,13 @@ db.exec(`
 db.exec(`
     CREATE TABLE diary (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER
-        task TEXT,
+        user_id INTEGER,
+        content TEXT,
+        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         liked BOOLEAN DEFAULT 0,
         FOREIGN KEY(user_id) REFERENCES users(id)
     )
-`)
+`);
 
-export default db
+export default db;
