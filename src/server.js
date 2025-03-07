@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
 
 // Routes
 app.use("/auth", authRoutes);
-app.use("/todos", authMiddleware, todoRoutes);
+app.use("/diaries", authMiddleware, todoRoutes);
 
 
 app.listen(PORT, () => {

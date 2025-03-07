@@ -58,7 +58,7 @@
     let isAuthenticating = false
     let isRegistration = false
     let selectedTab = 'All'
-    let todos = []
+    let diaries = []
 
     const apiBase = '/'
 
@@ -84,14 +84,14 @@
         main.style.display = 'flex'
         authContent.style.display = 'none'
 
-        await fetchTodos()
+        await fetchDiaries()
     }
 
     function updateHeaderText() {
-        const todosLength = todos.length
-        const newString = todos.length === 1 ?
+        const diariesLength = diaries.length
+        const newString = diaries.length === 1 ?
             `You have 1 open task.` :
-            `You have ${todosLength} open tasks.`
+            `You have ${diariesLength} open tasks.`
         header.querySelector('h1').innerText = newString
     }
 
@@ -99,8 +99,8 @@
         navElements.forEach(ele => {
             const btnText = ele.innerText.split(' ')[0]
 
-            // filter todos in here
-            const count = todos.filter(val => {
+            // filter diaries in here
+            const count = diaries.filter(val => {
                 if (btnText === 'All') {
                     return true
                 }
@@ -123,25 +123,25 @@
                 val.classList.remove('selected-tab')
             }
         })
-        renderTodos()
+        renderDiaries()
     }
 
-    function renderTodos() {
+    function renderDiaries() {
         // need to add filtering logic in here
 
         updateNavCount()
         updateHeaderText()
 
-        let todoList = ``
-        todos.filter(val => {
+        let diaryList = ``
+        diaries.filter(val => {
             return selectedTab === 'All' ? true : selectedTab === 'Complete' ? val.completed : !val.completed
-        }).forEach((todo, todoIndex) => {
-            const taskIndex = todo.id
-            todoList += `
-            <div class="card todo-item">
-                <p>${todo.task}</p>
-                <div class="todo-buttons">
-                    <button onclick="updateTodo(${taskIndex})" ${todo.completed ? 'disabled' : ''}>
+        }).forEach((diary, diaryIndex) => {
+            const taskIndex = diary.id
+            diaryList += `
+            <div class="card diary-item">
+                <p>${diary.task}</p>
+                <div class="diary-buttons">
+                    <button onclick="updateTodo(${taskIndex})" ${diary.completed ? 'disabled' : ''}>
                         <h6>Done</h6>
                     </button>
                     <button onclick="deleteTodo(${taskIndex})">
@@ -151,15 +151,15 @@
             </div>
             `
         })
-        todoList += `
+        diaryList += `
         <div class="input-container">
-            <input id="todoInput" placeholder="Add task" />
+            <input id="diaryInput" placeholder="Add task" />
             <button onclick="addTodo()">
                 <i class="fa-solid fa-plus"></i>
             </button>
         </div>
         `
-        main.innerHTML = todoList
+        main.innerHTML = diaryList
     }
 
     // showDashboard()
@@ -221,8 +221,8 @@
                 // authenicating into loading
                 authBtn.innerText = 'Loading...'
 
-                // fetch todos
-                await fetchTodos()
+                // fetch diaries
+                await fetchDiaries()
 
                 // show dashboard
                 showDashboard()
@@ -248,49 +248,49 @@
 
     // CRUD LOGIC
 
-    async function fetchTodos() {
+    async function fetchDiaries() {
         isLoading = true
-        const response = await fetch(apiBase + 'todos', {
+        const response = await fetch(apiBase + 'diaries', {
             headers: { 'Authorization': token }
         })
-        const todosData = await response.json()
-        todos = todosData
+        const diariesData = await response.json()
+        diaries = diariesData
         isLoading = false
-        renderTodos()
+        renderDiaries()
     }
 
     async function updateTodo(index) {
         // set task complete status to true
-        await fetch(apiBase + 'todos' + '/' + index, {
+        await fetch(apiBase + 'diaries' + '/' + index, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': token
             },
-            body: JSON.stringify({ task: todos.find(val => val.id === index).task, completed: 1 })
+            body: JSON.stringify({ task: diaries.find(val => val.id === index).task, completed: 1 })
         })
-        fetchTodos()
+        fetchDiaries()
     }
 
     async function deleteTodo(index) {
         // set task complete status to true
-        await fetch(apiBase + 'todos' + '/' + index, {
+        await fetch(apiBase + 'diaries' + '/' + index, {
             method: 'DELETE',
             headers: {
                 'Authorization': token
             },
         })
-        fetchTodos()
+        fetchDiaries()
     }
 
     async function addTodo() {
         // have to access this val later as it's rendered with js
-        const todoInput = document.getElementById('todoInput')
-        const task = todoInput.value
+        const diaryInput = document.getElementById('diaryInput')
+        const task = diaryInput.value
 
         if (!task) { return }
 
-        await fetch(apiBase + 'todos', {
+        await fetch(apiBase + 'diaries', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -298,8 +298,8 @@
             },
             body: JSON.stringify({ task })
         })
-        todoInput.value = ''
-        fetchTodos()
+        diaryInput.value = ''
+        fetchDiaries()
     }
 
     // UTILITY FUNCTIONS
@@ -309,10 +309,10 @@
 
     // default to login screen
 
-    // if is authenticated, show todo app
+    // if is authenticated, show diary app
     if (token) {
         async function run() {
-            await fetchTodos()
+            await fetchDiaries()
             showDashboard()
         }
         run()
