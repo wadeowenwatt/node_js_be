@@ -1,8 +1,8 @@
 ### Get /
-GET http://localhost:3000
+GET http://localhost:5000
 
 ### Register test
-POST http://localhost:3000/auth/register
+POST http://localhost:5000/auth/register
 Content-Type: application/json
 
 {
@@ -11,10 +11,15 @@ Content-Type: application/json
 }
 
 ### Login test
-POST http://localhost:3000/auth/login
+POST http://localhost:5000/auth/login
 Content-Type: application/json
 
 {
     "username": "test@gmail.com",
     "password": "123123123"
 }
+
+### Fetch all diaries
+GET http://localhost:5000/diaries
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzQxNDA5MjAxLCJleHAiOjE3NDE0OTU2MDF9.ARpdO5os6sSMY89HmrGk0Pjt7rZ1Se7e0pvHI9CxCKQ
+

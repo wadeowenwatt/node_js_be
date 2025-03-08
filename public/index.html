@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App | Node.JS Express.JS SQLite</title>
+    <title>Diary App | Node.JS Express.JS SQLite</title>
     <link rel="stylesheet" href="/styles.css" />
     <link rel="stylesheet" href="/fanta.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
@@ -33,6 +33,8 @@
     </section>
     <header style="display: none;">
         <h1 class="text-gradient">You have 0 open tasks.</h1>
+        <button onclick="logout()">
+            <h4>Logout</h4>
     </header>
     <nav style="display: none;" class="tab-container">
         <button onclick="changeTab('All')" class="tab-button  selected-tab">
@@ -73,7 +75,7 @@
     const password = document.getElementById('passwordInput')
     const registerBtn = document.getElementById('registerBtn')
     const authBtn = document.getElementById('authBtn')
-    const addTodoBtn = document.getElementById('addTodoBtn')
+    const addDiaryBtn = document.getElementById('addDiaryBtn')
     // const deleteBtn = document.getElementById('')
     // const updateBtn = 
 
@@ -136,15 +138,15 @@
         diaries.filter(val => {
             return selectedTab === 'All' ? true : selectedTab === 'Complete' ? val.completed : !val.completed
         }).forEach((diary, diaryIndex) => {
-            const taskIndex = diary.id
+            const diraryIndex = diary.id
             diaryList += `
             <div class="card diary-item">
-                <p>${diary.task}</p>
+                <p>${diary.content}</p>
                 <div class="diary-buttons">
-                    <button onclick="updateTodo(${taskIndex})" ${diary.completed ? 'disabled' : ''}>
+                    <button onclick="updateDiary(${diraryIndex})" ${diary.completed ? 'disabled' : ''}>
                         <h6>Done</h6>
                     </button>
-                    <button onclick="deleteTodo(${taskIndex})">
+                    <button onclick="deleteDiary(${diraryIndex})">
                         <h6>Delete</h6>
                     </button>
                 </div>
@@ -154,7 +156,7 @@
         diaryList += `
         <div class="input-container">
             <input id="diaryInput" placeholder="Add task" />
-            <button onclick="addTodo()">
+            <button onclick="addDiary()">
                 <i class="fa-solid fa-plus"></i>
             </button>
         </div>
@@ -220,7 +222,7 @@
 
                 // authenicating into loading
                 authBtn.innerText = 'Loading...'
-
+                console.log(token);
                 // fetch diaries
                 await fetchDiaries()
 
@@ -244,6 +246,8 @@
 
     function logout() {
         // wipe states and clear cached token
+        localStorage.setItem('token', null)
+        token = null
     }
 
     // CRUD LOGIC
@@ -259,7 +263,7 @@
         renderDiaries()
     }
 
-    async function updateTodo(index) {
+    async function updateDiary(index) {
         // set task complete status to true
         await fetch(apiBase + 'diaries' + '/' + index, {
             method: 'PUT',
@@ -272,7 +276,7 @@
         fetchDiaries()
     }
 
-    async function deleteTodo(index) {
+    async function deleteDiary(index) {
         // set task complete status to true
         await fetch(apiBase + 'diaries' + '/' + index, {
             method: 'DELETE',
@@ -283,7 +287,7 @@
         fetchDiaries()
     }
 
-    async function addTodo() {
+    async function addDiary() {
         // have to access this val later as it's rendered with js
         const diaryInput = document.getElementById('diaryInput')
         const task = diaryInput.value

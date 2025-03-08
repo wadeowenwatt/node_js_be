@@ -2,9 +2,12 @@ import express from "express";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 import authRoutes from "./routes/authRoutes.js";
-import todoRoutes from "./routes/todoRoutes.js";
+import diaryRoutes from "./routes/diaryRoutes.js";
 import dotenv from "dotenv";
 import authMiddleware from "./middleware/authMiddleware.js";
+
+console.log(new Date("2025-03-08 04:32:06Z").toISOString());
+
 
 dotenv.config();
 const app = express();
@@ -30,9 +33,9 @@ app.get("/", (req, res) => {
 
 // Routes
 app.use("/auth", authRoutes);
-app.use("/diaries", authMiddleware, todoRoutes);
+app.use("/diaries", authMiddleware, diaryRoutes);
 
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port http://localhost:${PORT}`);
 });

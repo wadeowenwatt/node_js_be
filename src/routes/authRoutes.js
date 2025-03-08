@@ -18,12 +18,12 @@ router.post("/register", (req, res) => {
     const result = insertUser.run(username, hashedPassword);
 
     // Insert one default diary for new user
-    const defaultTodo = `Hi! Add your first todo here!`;
-    const insertTodo = db.prepare(
+    const defaultDiary = `Hi! Add your first Diary here!`;
+    const insertDiary = db.prepare(
       `INSERT INTO diary (user_id, content) VALUES (?, ?)`
     );
 
-    insertTodo.run(result.lastInsertRowid, defaultTodo);
+    insertDiary.run(result.lastInsertRowid, defaultDiary);
 
     // Create a auth token using for handle other requests requiring authentication
     const token = jwt.sign(
