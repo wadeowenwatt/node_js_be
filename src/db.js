@@ -1,3 +1,4 @@
+// Deprecated: Use PostgreSQL instead
 import { DatabaseSync } from "node:sqlite";
 const db = new DatabaseSync(":memory:");
 

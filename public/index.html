@@ -107,8 +107,8 @@
                     return true
                 }
                 return btnText === 'Complete' ?
-                    val.completed :
-                    !val.completed
+                    val.liked :
+                    !val.liked
             }).length
 
             // target inside space and update value
@@ -136,14 +136,14 @@
 
         let diaryList = ``
         diaries.filter(val => {
-            return selectedTab === 'All' ? true : selectedTab === 'Complete' ? val.completed : !val.completed
+            return selectedTab === 'All' ? true : selectedTab === 'Complete' ? val.liked : !val.liked
         }).forEach((diary, diaryIndex) => {
             const diraryIndex = diary.id
             diaryList += `
             <div class="card diary-item">
                 <p>${diary.content}</p>
                 <div class="diary-buttons">
-                    <button onclick="updateDiary(${diraryIndex})" ${diary.completed ? 'disabled' : ''}>
+                    <button onclick="updateDiary(${diraryIndex})" ${diary.liked ? 'disabled' : ''}>
                         <h6>Done</h6>
                     </button>
                     <button onclick="deleteDiary(${diraryIndex})">
@@ -264,14 +264,13 @@
     }
 
     async function updateDiary(index) {
-        // set task complete status to true
         await fetch(apiBase + 'diaries' + '/' + index, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': token
             },
-            body: JSON.stringify({ task: diaries.find(val => val.id === index).task, completed: 1 })
+            body: JSON.stringify({ liked: diaries.find(val => val.id === index).liked})
         })
         fetchDiaries()
     }
@@ -290,9 +289,9 @@
     async function addDiary() {
         // have to access this val later as it's rendered with js
         const diaryInput = document.getElementById('diaryInput')
-        const task = diaryInput.value
+        const content = diaryInput.value
 
-        if (!task) { return }
+        if (!content) { return }
 
         await fetch(apiBase + 'diaries', {
             method: 'POST',
@@ -300,7 +299,7 @@
                 'Content-Type': 'application/json',
                 'Authorization': token
             },
-            body: JSON.stringify({ task })
+            body: JSON.stringify({ content })
         })
         diaryInput.value = ''
         fetchDiaries()

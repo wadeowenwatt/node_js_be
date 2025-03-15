@@ -1,56 +1,73 @@
 import express from "express";
-import db from "../db.js";
+import prisma from "../prismaClient.js";
 
 const router = express.Router();
 
 // Get all diarys for logged-in user
-router.get("/", (req, res) => {
-  
-  const getDiaries = db.prepare(
-    `SELECT * FROM diary WHERE user_id = ? ORDER BY id DESC`
-  );
-
-  const diaries = getDiaries.all(req.userId);
+router.get("/", async (req, res) => {
+  const diaries = await prisma.diary.findMany({
+    where: {
+      userId: req.userId,
+    },
+  });
 
   for (let diary of diaries) {
-    diary.createdAt = new Date(diary.createdAt).toISOString();
-    diary.updatedAt = new Date(diary.updatedAt).toISOString();
+    diary.createdAt = new Date(diary.createdAt).toString();
+    diary.updatedAt = new Date(diary.updatedAt).toString();
   }
 
   res.json(diaries);
 });
 
 // Create a new diary
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   const { content } = req.body;
 
-  const insertDiary = db.prepare(
-    `INSERT INTO diary (user_id, content) VALUES (?, ?)`
-  );
+  const diary = await prisma.diary.create({
+    data: {
+      content,
+      userId: req.userId,
+    },
+  });
 
-  insertDiary.run(req.userId, content);
-  res.json({id: insertDiary.lastInsertRowid, content: content, liked: false});
+  res.json(diary);
 });
 
-// Update a diary
-router.put("/:id", (req, res) => {
-  const { content } = req.body;
+// Update a diary and update UpdateAt
+router.put("/:id", async (req, res) => {
+  const { content, liked } = req.body;
   const { id } = req.params;
+  const userId = req.userId;
 
-  const updateDiary = db.prepare(
-    `UPDATE diary SET content = ? WHERE id = ? AND user_id = ?`
+  const updateDiary = await prisma.diary.update(
+    {
+      where: {
+        id: parseInt(id),
+        userId
+      },
+      data: {
+        liked: liked,
+        content,
+      }
+    }
   );
 
-  const info = updateDiary.run(content, id, req.userId);
-
-  if (info.changes) {
-    res.json({ id: id, content: content });
-  } else {
-    res.sendStatus(404);
-  }
+  res.json(updateDiary);
 });
 
 // Delete a diary
-router.delete("/:id", (req, res) => {});
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  const userId = req.userId;
+
+  await prisma.diary.delete({
+    where: {
+      id: parseInt(id),
+      userId
+    }
+  })
+
+  res.json({ message: "Diary deleted" });
+});
 
 export default router;

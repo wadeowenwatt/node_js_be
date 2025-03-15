@@ -21,5 +21,22 @@ Content-Type: application/json
 
 ### Fetch all diaries
 GET http://localhost:5000/diaries
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzQxNDA5MjAxLCJleHAiOjE3NDE0OTU2MDF9.ARpdO5os6sSMY89HmrGk0Pjt7rZ1Se7e0pvHI9CxCKQ
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzQxNDIwMzk1LCJleHAiOjE3NDE1MDY3OTV9.QHyM5Tb7deCL4fCk7jrEdWGWWa_Wooclll1jvdljdrQ
 
+### Update diary 
+PUT http://localhost:5000/diaries/1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzQxNDIwMzk1LCJleHAiOjE3NDE1MDY3OTV9.QHyM5Tb7deCL4fCk7jrEdWGWWa_Wooclll1jvdljdrQ
+
+{
+    "content": "bum bum bum bum"
+}
+
+### Create diary
+POST http://localhost:5000/diaries
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzQxNDIwMzk1LCJleHAiOjE3NDE1MDY3OTV9.QHyM5Tb7deCL4fCk7jrEdWGWWa_Wooclll1jvdljdrQ
+
+{
+    "content": "haiajsdaj"
+}
