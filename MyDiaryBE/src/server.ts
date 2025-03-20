@@ -6,9 +6,12 @@ dotenv.config();
 const app: Express = express();
 const port = process.env.PORT || 3000;
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!');
-});
+// Middleware
+app.use(express.json());
+
+
+app.use("/v1/api/auth", authRoutes);
+app.use("/v1/api/diaries", authMiddleware, diaryRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port http://localhost:${port}`);
