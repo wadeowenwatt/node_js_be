@@ -1,6 +1,8 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes';
+import authMiddleware from './middleware/authMiddleware';
+import diaryRoutes from './routes/diaryRoutes';
 
 dotenv.config();
 
@@ -12,7 +14,7 @@ app.use(express.json());
 
 
 app.use("/v1/api/auth", authRoutes);
-app.use("/v1/api/diaries", authMiddleware);
+app.use("/v1/api/diaries", authMiddleware, diaryRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port http://localhost:${port}`);
