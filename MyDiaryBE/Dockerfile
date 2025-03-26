@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["ts-node", "./src/server.ts"]
+CMD ["npm", "run", "dev"]
